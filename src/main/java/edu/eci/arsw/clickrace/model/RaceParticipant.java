@@ -9,7 +9,7 @@ package edu.eci.arsw.clickrace.model;
  *
  * @author hcadavid
  */
-public class RaceParticipant implements Comparable<RaceParticipant>{
+public class RaceParticipant implements Comparable<RaceParticipant> {
 
     int number;
 
@@ -22,6 +22,10 @@ public class RaceParticipant implements Comparable<RaceParticipant>{
 
     public int getNumber() {
         return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     @Override
@@ -51,9 +55,12 @@ public class RaceParticipant implements Comparable<RaceParticipant>{
 
     @Override
     public int compareTo(RaceParticipant o) {
-        return o.getNumber()-this.getNumber();
+        return o.getNumber() - this.getNumber();
     }
 
+    @Override
+    public String toString() {
+        return "RaceParticipant{" + "number=" + number + '}';
+    }
 
-    
 }

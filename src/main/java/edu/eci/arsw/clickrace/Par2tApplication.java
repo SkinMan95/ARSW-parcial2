@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Par2tApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Par2tApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Par2tApplication.class, args);
+    }
 }

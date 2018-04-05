@@ -27,45 +27,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/races")
 public class ClicRaceRESTController {
-    
 
     @Autowired
     ClickRaceServices services;
-    
-    
-    
-    @RequestMapping(path = "/{racenum}/participants",method = RequestMethod.GET)
+
+    @RequestMapping(path = "/{racenum}/participants", method = RequestMethod.GET)
     public ResponseEntity<?> getRaceParticipantsNums(@PathVariable(name = "racenum") String racenum) {
-        
+
         try {
-            return new ResponseEntity<>(services.getRegisteredPlayers(Integer.parseInt(racenum)),HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(services.getRegisteredPlayers(Integer.parseInt(racenum)), HttpStatus.ACCEPTED);
         } catch (ServicesException ex) {
             Logger.getLogger(ClicRaceRESTController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(ex.getLocalizedMessage(),HttpStatus.NOT_FOUND);
-        } catch (NumberFormatException ex){
+            return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.NOT_FOUND);
+        } catch (NumberFormatException ex) {
             Logger.getLogger(ClicRaceRESTController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("/{racenum}/ must be an integer value.",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("/{racenum}/ must be an integer value.", HttpStatus.BAD_REQUEST);
         }
     }
-    
 
-    @RequestMapping(path = "/{racenum}/participants",method = RequestMethod.PUT)
-    public ResponseEntity<?> addParticipantNum(@PathVariable(name = "racenum") String racenum,@RequestBody RaceParticipant rp) {
+    @RequestMapping(path = "/{racenum}/participants", method = RequestMethod.PUT)
+    public ResponseEntity<?> addParticipantNum(@PathVariable(name = "racenum") String racenum, @RequestBody RaceParticipant rp) {
         try {
             services.registerPlayerToRace(Integer.parseInt(racenum), rp);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (ServicesException ex) {
             Logger.getLogger(ClicRaceRESTController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(ex.getLocalizedMessage(),HttpStatus.BAD_REQUEST);
-        } catch (NumberFormatException ex){
+            return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NumberFormatException ex) {
             Logger.getLogger(ClicRaceRESTController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("/{racenum}/ must be an integer value.",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("/{racenum}/ must be an integer value.", HttpStatus.BAD_REQUEST);
         }
 
     }
-
-    
-
-    
 
 }

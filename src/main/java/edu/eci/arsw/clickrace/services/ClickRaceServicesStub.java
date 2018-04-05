@@ -19,48 +19,50 @@ import org.springframework.stereotype.Service;
 public class ClickRaceServicesStub implements ClickRaceServices {
 
     //racenum x racersid_set
-    ConcurrentHashMap<Integer, Set<RaceParticipant>> racesData=new ConcurrentHashMap<>();
-    
-    public ClickRaceServicesStub(){
-        racesData.put(25, new ConcurrentSkipListSet<>());        
+    ConcurrentHashMap<Integer, Set<RaceParticipant>> racesData = new ConcurrentHashMap<>();
+
+    public static final int MAX_NUMBER_OF_PARTICIPANTS = 5;
+
+    public ClickRaceServicesStub() {
+        racesData.put(25, new ConcurrentSkipListSet<>());
     }
-    
+
     @Override
-    public void registerPlayerToRace(int racenum, RaceParticipant rp) throws ServicesException{
-        if (!racesData.containsKey(racenum)){
-            throw new ServicesException("Race "+racenum+" not registered in the server.");
-        }
-        else{
-            if (racesData.get(racenum).contains(rp)){
-                throw new ServicesException("Racer "+rp.getNumber()+" already registered in race "+racenum);
+    public void registerPlayerToRace(int racenum, RaceParticipant rp) throws ServicesException {
+        System.out.println(rp);
+        if (!racesData.containsKey(racenum)) {
+            throw new ServicesException("Race " + racenum + " not registered in the server.");
+        } else {
+            if (racesData.get(racenum).contains(rp)) {
+                throw new ServicesException("Racer " + rp.getNumber() + " already registered in race " + racenum);
+            } else {
+                if (racesData.get(racenum).size() < MAX_NUMBER_OF_PARTICIPANTS) {
+                    racesData.get(racenum).add(rp);
+                } else {
+                    throw new ServicesException("Maximum number of participants reached: " + MAX_NUMBER_OF_PARTICIPANTS);
+                }
             }
-            else{
-                racesData.get(racenum).add(rp);
-            }
-            
+
         }
-        
+
     }
 
     @Override
     public Set<RaceParticipant> getRegisteredPlayers(int racenum) throws ServicesException {
         return racesData.get(racenum);
     }
- 
-    
+
     @Override
     public void removePlayerFromRace(int racenum, RaceParticipant rp) throws ServicesException {
-        if (!racesData.containsKey(racenum)){
-            throw new ServicesException("Race "+racenum+" not registered in the server.");
-        }
-        else{
-            if (!racesData.get(racenum).contains(rp)){
-                throw new ServicesException("Racer "+rp.getNumber()+" not registered in race "+racenum);
-            }
-            else{
+        if (!racesData.containsKey(racenum)) {
+            throw new ServicesException("Race " + racenum + " not registered in the server.");
+        } else {
+            if (!racesData.get(racenum).contains(rp)) {
+                throw new ServicesException("Racer " + rp.getNumber() + " not registered in race " + racenum);
+            } else {
                 racesData.get(racenum).remove(rp);
-            }            
+            }
         }
     }
-    
+
 }

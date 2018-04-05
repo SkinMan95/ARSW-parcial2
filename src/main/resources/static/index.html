@@ -11,15 +11,17 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="customstyles.css" rel="stylesheet">
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-        
+
         <script src="app.js"></script>
     </head>
     <body>
-        
-        
+
+
         <div class="row">
             <div class="col-md-8">
                 <canvas id="cnv" width="640" height="480"></canvas>
@@ -28,14 +30,14 @@ and open the template in the editor.
                 <div>
                     Race number:<input id="racenum" type="number" value="25"/>
                 </div>                    
-                    Racer id:<input id="playerid" type="number"/>
-                    <button  onclick="module.initAndRegisterInServer()" >Register for a race</button>
-                
-                
-                
-                <button  onclick="module.loadCompetitorsFromServer()" >Load competitors</button>
-                
-                
+                Racer id:<input id="playerid" type="number"/>
+                <button id="registerButton"  onclick="module.initAndRegisterInServer()" >Register for a race</button>
+
+
+
+                <button id="loadCompetitorsButton"  onclick="module.loadCompetitorsFromServer()" >Load competitors</button>
+
+
             </div>            
             <div class="col-md-4">
                 <button id="movebutton" class="controls" onclick="model.movex()" >MOVE MY CAR!</button>                
@@ -43,8 +45,8 @@ and open the template in the editor.
             <div class="col-md-4">
                 Winner: <div id="winner"></div>
             </div>
-            
-            
+
+
         </div>
 
         <hr>
