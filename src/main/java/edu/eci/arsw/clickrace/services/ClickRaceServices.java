@@ -20,4 +20,6 @@ public interface ClickRaceServices {
     
     public Set<RaceParticipant> getRegisteredPlayers(int racenum) throws ServicesException;
     
+    public RaceParticipant registerWinner(int racenum, RaceParticipant rp) throws ServicesException;
+    
 }

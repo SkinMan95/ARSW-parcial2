@@ -9,9 +9,22 @@ var model = {
     carsCurrentYPositions: [],
     movex: function () {
         model.mycarxpos += 10;
+        console.log("1: ", model.mycarxpos);
+        console.log("2: ", model.mycar.xpos);
         model.paintCars();
         if (module.stompClient != null) {
             module.stompClient.send("/topic/car" + model.mycar.number, {}, JSON.stringify({car: model.mycar.number, xpos: model.mycarxpos}));
+            canvas = document.getElementById("cnv");
+            if (model.mycarxpos >= canvas.width) {
+                console.log("Trying to register myself as a winner!!");
+                axios.put('/races/25/winner', model.mycar)
+                .then(function (response) {
+                    console.log("put response: ", response);
+                })
+                .catch(function (error) {
+                    console.log("error: " + error);
+                });
+            }
         }
     },
     paintCars: function () {
@@ -108,6 +121,14 @@ var module = {
                         }
                     }
             );
+    
+            module.stompClient.subscribe('/topic/races/25/winner', function (data) {
+                msgdata = JSON.parse(data.body);
+                console.log("There is a winner: ", msgdata.number);
+                $("#movebutton").attr("disabled", true);
+                $("#winner").text(msgdata.number);
+                alert("There is a winner: " + msgdata.number);
+            })
         });
     },
     disconnect: function () {

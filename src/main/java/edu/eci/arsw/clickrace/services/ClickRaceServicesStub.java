@@ -20,6 +20,7 @@ public class ClickRaceServicesStub implements ClickRaceServices {
 
     //racenum x racersid_set
     ConcurrentHashMap<Integer, Set<RaceParticipant>> racesData = new ConcurrentHashMap<>();
+    ConcurrentHashMap<Integer, RaceParticipant> winners = new ConcurrentHashMap<>();
 
     public static final int MAX_NUMBER_OF_PARTICIPANTS = 5;
 
@@ -63,6 +64,13 @@ public class ClickRaceServicesStub implements ClickRaceServices {
                 racesData.get(racenum).remove(rp);
             }
         }
+    }
+
+    @Override
+    public RaceParticipant registerWinner(int racenum, RaceParticipant rp) throws ServicesException {
+        winners.putIfAbsent(racenum, rp);
+        
+        return winners.get(racenum);
     }
 
 }
