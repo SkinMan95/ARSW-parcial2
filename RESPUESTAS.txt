@@ -1,23 +1,23 @@
-
-
-
-* CONDICIÓN DE CARRERA 1:
+* CONDICIÓN DE CARRERA 1: 
+  Se puede dar que mas de 5 competidores esten en la misma sesion
 
 	REGIÓN CRÍTICA:
-
+	Varios usuarios pueden realizar la peticion de ingresar al mismo tiempo
+	para registrarse
 	POSIBLES INCONSISTENCIAS (SI NO SE ELIMINA):
-
+	Mas de los 5 usuarios permitidos en la sesion
 	SOLUCIÓN:
-
+	El servidor solo permite registrarse a los primeros 5 competidores en
+	la sesion
 
 * CONDICIÓN DE CARRERA 2:
-
+  Un usuario que no gano puede quedar como ganador si se presentan al mismo tiempo
         REGIÓN CRÍTICA:
-
+	Varios usuarios se pueden presentar al mismo tiempo
         POSIBLES INCONSISTENCIAS (SI NO SE ELIMINA):
-
+	Se tiene un ganador que llego despues que el verdadero
         SOLUCIÓN:
-
+	Se realiza un control de parte del servidor para que cuando un usuario notique para postularse como el ganador, el servidor recibe solo la primera peticion verdadera y hace broadcast del ganador por el topic de los ganadores
 
 ....
 
