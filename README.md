@@ -37,7 +37,7 @@ La siguiente, es una vista dinámica -diagrama de actividades- de la versión ac
 3. (20%) Realice la vista dinámica (diagrama de actividades) de su solución en la hoja suministrada. 
 
 ### Avance
-- [ ] Parte 1.A
+- [x] Parte 1.A
 - [x] Parte 1.B
 - [x] Parte 2
 - [x] Parte 3

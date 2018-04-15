@@ -1,5 +1,3 @@
-
-
 var model = {
     mycar: undefined,
     mycarxpos: 10,
@@ -18,12 +16,12 @@ var model = {
             if (model.mycarxpos >= canvas.width) {
                 console.log("Trying to register myself as a winner!!");
                 axios.put('/races/25/winner', model.mycar)
-                .then(function (response) {
-                    console.log("put response: ", response);
-                })
-                .catch(function (error) {
-                    console.log("error: " + error);
-                });
+                    .then(function (response) {
+			console.log("put response: ", response);
+                    })
+                    .catch(function (error) {
+			console.log("error: " + error);
+                    });
             }
         }
     },
@@ -37,9 +35,9 @@ var model = {
 
         //paint competitors cars
         model.loadedCars.forEach(
-                function (car) {
-                    model.paint(car, model.carsCurrentXPositions[car.number], model.carsCurrentYPositions[car.number], ctx);
-                }
+            function (car) {
+                model.paint(car, model.carsCurrentXPositions[car.number], model.carsCurrentYPositions[car.number], ctx);
+            }
         );
     },
     paint: function (car, xposition, yposition, ctx) {
@@ -53,7 +51,7 @@ var model = {
             ctx.fillText("" + car.number, xposition + (img.naturalWidth / 2), yposition + (img.naturalHeight / 2));
         };
     }
-}
+};
 
 
 var module = {
@@ -67,39 +65,41 @@ var module = {
         console.log(model.mycar);
 
         axios.put('/races/25/participants', model.mycar)
-                .then(function (response) {
-                    console.log("Competitor registered successfully!");
-                    model.paintCars();
-                    $("#registerButton").attr("disabled", true);
-                })
-                .catch(function (error) {
-                    alert("error:" + error);
-                });
+            .then(function (response) {
+                console.log("Competitor registered successfully!");
+                model.paintCars();
+                $("#registerButton").attr("disabled", true);
+            })
+            .catch(function (error) {
+                alert("error:" + error);
+            });
     },
     loadCompetitorsFromServer: function () {
         if (model.mycar == undefined) {
             alert('Register your car first!');
         } else {
             axios.get("/races/25/participants")
-                    .then(function (response) {
-                        model.loadedCars = response.data;
-                        var carCount = 1;
-                        console.log("Competitors loaded!");
-                        model.loadedCars.forEach(
-                                function (car) {
-                                    if (car.number != model.mycar.number) {
-                                        model.carsCurrentXPositions[car.number] = 10;
-                                        model.carsCurrentYPositions[car.number] = 40 * carCount;
-                                        carCount++;
-                                    }
-                                }
-                        );
-                        model.paintCars();
-                        module.connectAndSubscribeToCompetitors();
-                        $("#loadCompetitorsButton").remove(); // remove button
-                        $("#movebutton").attr("disabled", false);
-                    }
+                .then(function (response) {
+                    model.loadedCars = response.data;
+                    var carCount = 1;
+                    console.log("Competitors loaded!");
+                    model.loadedCars.forEach(
+                        function (car) {
+                            if (car.number != model.mycar.number) {
+                                model.carsCurrentXPositions[car.number] = 10;
+                                model.carsCurrentYPositions[car.number] = 40 * carCount;
+                                carCount++;
+                            }
+                        }
                     );
+                    model.paintCars();
+                    module.connectAndSubscribeToCompetitors();
+                    if (model.loadedCars.length >= 5) {
+			$("#loadCompetitorsButton").remove(); // remove button
+			$("#movebutton").attr("disabled", false);
+			// alert("Race has started!!");
+		    }
+                });
         }
 
     },
@@ -110,25 +110,29 @@ var module = {
             console.log('Connected: ' + frame);
 
             model.loadedCars.forEach(
-                    function (car) {
-                        //don't load my own car
-                        if (car.number !== model.mycar.number) {
-                            module.stompClient.subscribe('/topic/car' + car.number, function (data) {
-                                msgdata = JSON.parse(data.body);
-                                model.carsCurrentXPositions[msgdata.car] = msgdata.xpos;
-                                model.paintCars();
-                            });
-                        }
+                function (car) {
+                    //don't load my own car
+                    if (car.number !== model.mycar.number) {
+                        module.stompClient.subscribe('/topic/car' + car.number, function (data) {
+                            msgdata = JSON.parse(data.body);
+                            model.carsCurrentXPositions[msgdata.car] = msgdata.xpos;
+                            model.paintCars();
+			    if ($("#loadCompetitorsButton").length) {
+				$("#loadCompetitorsButton").remove(); // remove button
+			    }
+			    $("#movebutton").attr("disabled", false); // just in case
+                        });
                     }
+                }
             );
-    
+	    
             module.stompClient.subscribe('/topic/races/25/winner', function (data) {
                 msgdata = JSON.parse(data.body);
                 console.log("There is a winner: ", msgdata.number);
                 $("#movebutton").attr("disabled", true);
                 $("#winner").text(msgdata.number);
                 alert("There is a winner: " + msgdata.number);
-            })
+            });
         });
     },
     disconnect: function () {
@@ -138,7 +142,7 @@ var module = {
         setConnected(false);
         console.log("Disconnected");
     }
-}
+};
 
 
 document.addEventListener('DOMContentLoaded', function () {
